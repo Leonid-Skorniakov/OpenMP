@@ -30,8 +30,7 @@ struct result {
     }
 };
 
-result parallel_solve(double r, long n, int threads_count, int chunk_size)
-{
+result parallel_solve(double r, long n, int threads_count, int chunk_size) {
     double start = omp_get_wtime() * 1000; // Время начала выполнения тела метода
 
     // Константа, равная количеству различных чисел,
@@ -67,8 +66,7 @@ result parallel_solve(double r, long n, int threads_count, int chunk_size)
 }
 
 
-result usual_solve(double r, int n)
-{
+result usual_solve(double r, int n) {
     double start = omp_get_wtime() * 1000;
 
     unsigned long long const MAX = (1LL << 31) - 1;
@@ -92,8 +90,7 @@ result usual_solve(double r, int n)
 }
 
 
-void test_solve(double r, int n, int threads_count, int test_count, int chunk_size, result* testes, bool isShow = false)
-{
+void test_solve(double r, int n, int threads_count, int test_count, int chunk_size, result* testes, bool isShow = false) {
     double sumTime = 0;
     double sumAnswer = 0;
     double sumVariation = 0;
@@ -101,6 +98,7 @@ void test_solve(double r, int n, int threads_count, int test_count, int chunk_si
     if (threads_count == 0) {
         threads_count = omp_get_max_threads();
     }
+    
     for (int i = 0; i < test_count; ++i) {
         if (threads_count == -1) {
             testes[i] = usual_solve(r, n);
@@ -111,10 +109,12 @@ void test_solve(double r, int n, int threads_count, int test_count, int chunk_si
         sumAnswer += testes[i].answer;
         sumVariation += testes[i].variation;
     }
+    
     testes[test_count] = result(sumTime / test_count, sumAnswer / test_count, sumVariation / test_count);
     if (threads_count == -1) {
         threads_count = 0;
     }
+    
     if (isShow) {
         printf("Time (%i thread(s)): %g ms\n", threads_count, sumTime / test_count);
     }
@@ -153,8 +153,7 @@ void write_results(result* testes, int test_count, double r, int n, std::string 
     deb.close();
 }
 
-int main(int argc, char** argv)
-{
+int main(int argc, char** argv) {
     try {
         double r;
         long n;
@@ -164,7 +163,6 @@ int main(int argc, char** argv)
         std::string debug = "debug.txt";
         int test_count = 1;
         int chunk_size = 64;
-
 
         if (false) {
             std::cin >> debug;
